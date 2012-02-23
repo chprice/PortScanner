@@ -1,4 +1,4 @@
-import socket, sys
+import socket, sys, random
 def scan(address, port):
     s = socket.socket()
     s.settimeout(1.0)
@@ -58,12 +58,23 @@ def scanner(ip, num, ports):
     listDump(ip+str(num)+".txt", scanRange(ip, num, ports))
 
 print("Welcome to the port scanner I wrote in like 15 minutes.")
-I = input("Input a starting ip address ")
-N = int(input("Input the number of computers you want to scan "))
-tempP = input("Input a list of ports you want to be scanned seperated by a comma (but no spaces, I'm lazy) ").split(",")
-P=[]
-for eh in tempP:
-    P.append(int(eh))
+choice = input("Pick a type of scan: scan, random, (or type help) : ")
+if(choice == "scan"):
+    I = input("Input a starting ip address ")
+    N = int(input("Input the number of computers you want to scan "))
+    tempP = input("Input a list of ports you want to be scanned seperated by a comma (but no spaces, I'm lazy) ").split(",")
+    P=[]
+    for eh in tempP:
+        P.append(int(eh))
+elif(choice == "random"):
+    N = random.randint(10, 200)
+    P = [21, 80]
+    I=str(random.randint(0,255)) + "." + str(random.randint(0,255)) + "." + str(random.randint(0,255)) + "." + str(random.randint(0,255))
+else:
+    print("scan: scan a specific range of computers.")
+    print("random: scans a random set of computers, and scans 10-200 computers")
+    print("help: prints this message")
+    exit(0)
 fileName = input("Input a filename you want me to dump the results to (or - to use standard output) (just hit return to default) ")
 data = scanRange(I, N, P)
 if(fileName == "-"):
