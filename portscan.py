@@ -1,4 +1,33 @@
-import socket, sys, random
+import socket, sys, random, threading
+
+#---global---
+locky = threading.Lock()
+master = []
+numThreads = 0
+
+
+class Scanner(threading.Thread):
+    def __init__(self, addr, portList):
+        threading.Thread.__init__(self)
+        self.addr = addr
+        self.portList = portList
+        self.master = []
+    def run(self):
+        global locky
+        print("Scanning: "+self.addr)
+        for port in self.portList:
+            if(scan(self.addr, port)):
+                self.master.append([self.addr, port])
+        global numThreads
+        global master
+        locky.acquire()
+        master.extend(self.master)
+        numThreads=numThreads-1
+        locky.release()
+        print("Thread for", self.addr, "ending now")
+        
+        
+
 def scan(address, port):
     s = socket.socket()
     s.settimeout(1.0)
@@ -12,16 +41,20 @@ def scan(address, port):
     s.close()
 
 def scanRange(ip, numComputers, portList):
-    count =0
-    master =[]
+    count=0
+    global master
+    global numThreads
     addr = ip
     while count < numComputers:
-        print("Scanning: "+addr)
-        for port in portList:
-            if(scan(addr, port)):
-                master.append([addr, port])
-        count=count+1
-        addr = incr(addr.split("."))
+        if numThreads < 60:
+            numThreads = numThreads + 1 # this may be a race condition
+            Scanner(addr, portList).start()
+            addr = incr(addr.split("."))
+            count = count+1
+    while (numThreads != 0):
+        #print(numThreads)
+        derp = False
+    print("Done scanning")
     return master
 
 
@@ -79,7 +112,7 @@ fileName = input("Input a filename you want me to dump the results to (or - to u
 data = scanRange(I, N, P)
 if(fileName == "-"):
     for line in data:
-        print(line[0]+" "+int(line[1]))
+        print(line[0]+" "+str(line[1]))
 if(fileName == ""):
     listDump(I+str(N)+".txt", data)
 else:
