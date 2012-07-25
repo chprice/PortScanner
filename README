@@ -1,0 +1,1 @@
+This is a lightweight port scanner written in python designed to utilize multithreading to scan large blocks of ips simultaneously. It is not designed to give any indepth information about a system, simply to check to see if a server responds to connections on specified ports.

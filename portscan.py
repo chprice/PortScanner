@@ -119,7 +119,7 @@ if(fileName == "-"):
     print("Time taken:", timeTaken)
     for line in data:
         print(line[0]+" "+portListToString(line[1]))
-elif(fileName == ""):
+elif(fileName == "" or fileName == "\n"):
     listDump(I+"-"+finalIP+".txt", data, timeTaken)
 else:
     listDump(fileName, data, timeTaken)
