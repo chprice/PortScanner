@@ -94,11 +94,11 @@ def listDump(name, ipList, timeTaken):
     filehandle.close()
 
 print("Welcome to the port scanner I wrote in like 15 minutes.")
-choice = input("Pick a type of scan: scan, random, (or type help) : ")
+choice = raw_input("Pick a type of scan: scan, random, (or type help) : ")
 if(choice == "scan"):
-    I = input("Input a starting ip address ")
-    N = int(input("Input the number of computers you want to scan "))
-    tempP = input("Input a list of ports you want to be scanned seperated by a comma (but no spaces, I'm lazy) ").split(",")
+    I = raw_input("Input a starting ip address ")
+    N = int(raw_input("Input the number of computers you want to scan "))
+    tempP = raw_input("Input a list of ports you want to be scanned seperated by a comma (but no spaces, I'm lazy) ").split(",")
     P=[]
     for eh in tempP:
         P.append(int(eh))
@@ -111,7 +111,7 @@ else:
     print("random: scans a random set of computers, and scans 10-200 computers")
     print("help: prints this message")
     exit(0)
-fileName = input("Input a filename you want me to dump the results to (or - to use standard output) (just hit return to default) ")
+fileName = raw_input("Input a filename you want me to dump the results to (or - to use standard output) (just hit return to default) ")
 startTime = time.time()
 data, finalIP = scanRange(I, N, P)
 timeTaken = time.time() - startTime
